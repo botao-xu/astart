@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://drikoic70u781"]
+[gd_scene load_steps=8 format=3 uid="uid://drikoic70u781"]
 
+[ext_resource type="Script" uid="uid://cpxh5hbihdmwi" path="res://Scenes/player.gd" id="1_6t5aa"]
 [ext_resource type="Texture2D" uid="uid://qsq2hjda7p8l" path="res://AssetBundle/Sprites/Foxy.png" id="1_v0iea"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cvnsp"]
@@ -18,7 +19,7 @@ region = Rect2(66, 0, 33, 32)
 atlas = ExtResource("1_v0iea")
 region = Rect2(99, 0, 33, 32)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_f60y1"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_x3wgy"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -34,14 +35,14 @@ animations = [{
 "texture": SubResource("AtlasTexture_fkybt")
 }],
 "loop": true,
-"name": &"idle",
+"name": &"default",
 "speed": 12.0
 }]
 
 [node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_6t5aa")
+move_speed = 100.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_f60y1")
-animation = &"idle"
-autoplay = "idle"
-frame_progress = 0.752958
+sprite_frames = SubResource("SpriteFrames_x3wgy")
+autoplay = "default"
