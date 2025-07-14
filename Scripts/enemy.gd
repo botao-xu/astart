@@ -6,6 +6,10 @@ var is_dead : bool = false
 func _physics_process(delta: float) -> void:
 	if not is_dead:
 		position += Vector2(slimer_speed, 0) * delta
+		
+		# Destroy slimer if it goes past the left edge of the screen
+		if position.x < -266:
+			queue_free()
 
 
 func _on_body_entered(body: Node2D) -> void:
