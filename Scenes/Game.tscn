@@ -7,7 +7,7 @@
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_j5yw3"]
 normal = Vector2(0, 1)
-distance = 16.0
+distance = 1.0
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_kldst"]
 normal = Vector2(0.999948, -0.0102036)
@@ -34,6 +34,7 @@ zoom = Vector2(2.4, 2.4)
 metadata/_edit_lock_ = true
 
 [node name="Player" parent="." instance=ExtResource("2_gl6un")]
+position = Vector2(-200, 72)
 
 [node name="Boundaries" type="Node2D" parent="."]
 metadata/_edit_lock_ = true
@@ -49,7 +50,7 @@ shape = SubResource("WorldBoundaryShape2D_gl6un")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Boundaries/WallTop"]
-position = Vector2(-1, -31)
+position = Vector2(1, 23)
 shape = SubResource("WorldBoundaryShape2D_j5yw3")
 
 [node name="WallLeft" type="StaticBody2D" parent="Boundaries"]
