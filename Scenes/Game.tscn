@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://iewu6lloy4v6"]
+[gd_scene load_steps=8 format=3 uid="uid://iewu6lloy4v6"]
 
 [ext_resource type="Texture2D" uid="uid://c00ft2gr8aq2c" path="res://AssetBundle/Sprites/ForestBackground.png" id="1_iukft"]
 [ext_resource type="PackedScene" uid="uid://d11f1e8a1o511" path="res://Scenes/player.tscn" id="2_gl6un"]
+[ext_resource type="PackedScene" uid="uid://cuk7mkt3nak18" path="res://Scenes/slimer.tscn" id="3_j5yw3"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_gl6un"]
 
@@ -18,6 +19,7 @@ normal = Vector2(-0.999901, -0.0140831)
 distance = -238.131
 
 [node name="Node2D" type="Node2D"]
+y_sort_enabled = true
 
 [node name="Background1" type="Sprite2D" parent="."]
 position = Vector2(-120, 0)
@@ -65,3 +67,6 @@ metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Boundaries/WallRight"]
 shape = SubResource("WorldBoundaryShape2D_b2bpf")
+
+[node name="Area2D" parent="." instance=ExtResource("3_j5yw3")]
+position = Vector2(215, 68)

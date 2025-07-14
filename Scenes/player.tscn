@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://d11f1e8a1o511"]
+[gd_scene load_steps=21 format=3 uid="uid://d11f1e8a1o511"]
 
 [ext_resource type="Texture2D" uid="uid://qsq2hjda7p8l" path="res://AssetBundle/Sprites/Foxy.png" id="1_v0iea"]
 
@@ -8,18 +8,49 @@ script/source = "extends CharacterBody2D
 
 @export var move_speed : float = 50
 @export var animator : AnimatedSprite2D
+var is_game_over : bool = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	velocity = Input.get_vector(\"left\", \"right\", \"up\", \"down\") * move_speed
-	
-	if velocity == Vector2.ZERO:
-		animator.play(\"idle\")
-	else:
-		animator.play(\"run\")
-	
-	move_and_slide()
+func _physics_process(delta: float) -> void:
+	if not is_game_over:
+		velocity = Input.get_vector(\"left\", \"right\", \"up\", \"down\") * move_speed
+		if velocity == Vector2.ZERO:
+			animator.play(\"idle\")
+		else:
+			animator.play(\"run\")
+		
+		move_and_slide()
+
+func game_over():
+	is_game_over = true
+	animator.play(\"die\")
+	await get_tree().create_timer(3).timeout
+	get_tree().reload_current_scene()
 "
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gymyn"]
+atlas = ExtResource("1_v0iea")
+region = Rect2(0, 256, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pu2lt"]
+atlas = ExtResource("1_v0iea")
+region = Rect2(33, 256, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ukyrk"]
+atlas = ExtResource("1_v0iea")
+region = Rect2(66, 256, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7dp3o"]
+atlas = ExtResource("1_v0iea")
+region = Rect2(99, 256, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h4iuc"]
+atlas = ExtResource("1_v0iea")
+region = Rect2(132, 256, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fd4e3"]
+atlas = ExtResource("1_v0iea")
+region = Rect2(165, 256, 33, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_v0iea"]
 atlas = ExtResource("1_v0iea")
@@ -63,6 +94,29 @@ region = Rect2(165, 32, 33, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fkybt"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gymyn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pu2lt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ukyrk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7dp3o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h4iuc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fd4e3")
+}],
+"loop": true,
+"name": &"die",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_v0iea")
@@ -113,9 +167,8 @@ animator = NodePath("AnimatedSprite2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_fkybt")
-animation = &"run"
+animation = &"die"
 autoplay = "idle"
-frame_progress = 0.233148
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 5)
