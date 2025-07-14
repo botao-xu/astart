@@ -12,17 +12,48 @@ var last_spawn_time: float = 0.0         # Track when last spawn occurred
 var score: int = 0
 @export var score_label: Label
 
+# Game Over UI
+@export var game_over_label: Label
+
+# Congratulations UI
+@export var congratulations_label: Label
+
+# Game state
+var game_ended: bool = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# Initialize last spawn time
 	last_spawn_time = Time.get_time_dict_from_system()["second"]
 
 func increase_score() -> void:
+	if game_ended:
+		return
+		
 	score += 1
 	score_label.text = "Score: " + str(score)
+	
+	# Check for win condition
+	if score >= 15:
+		show_congratulations()
+
+func show_game_over() -> void:
+	game_ended = true
+	game_over_label.visible = true
+
+func show_congratulations() -> void:
+	game_ended = true
+	congratulations_label.visible = true
+	
+	# Wait 3 seconds then restart the scene
+	await get_tree().create_timer(3).timeout
+	get_tree().reload_current_scene()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if game_ended:
+		return
+		
 	# Gradually decrease spawn interval (increase frequency)
 	if current_spawn_interval > min_spawn_interval:
 		current_spawn_interval -= spawn_acceleration * delta
@@ -34,6 +65,9 @@ func _process(delta: float) -> void:
 		attempt_spawn_slimer()
 
 func attempt_spawn_slimer() -> void:
+	if game_ended:
+		return
+		
 	var current_time = Time.get_time_dict_from_system()["second"]
 	var time_since_last_spawn = current_time - last_spawn_time
 	
@@ -47,6 +81,9 @@ func attempt_spawn_slimer() -> void:
 		last_spawn_time = current_time
 
 func _spawn_slimer() -> void:
+	if game_ended:
+		return
+		
 	var slimer_node = slimer_scene.instantiate()
 	slimer_node.position = Vector2(230, randf_range(20, 120))
 	get_tree().current_scene.add_child(slimer_node)
