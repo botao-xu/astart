@@ -1,8 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://iewu6lloy4v6"]
+[gd_scene load_steps=10 format=3 uid="uid://iewu6lloy4v6"]
 
+[ext_resource type="Script" uid="uid://e60pb6koi8f0" path="res://Scripts/GameManager.gd" id="1_b2bpf"]
 [ext_resource type="Texture2D" uid="uid://c00ft2gr8aq2c" path="res://AssetBundle/Sprites/ForestBackground.png" id="1_iukft"]
 [ext_resource type="PackedScene" uid="uid://d11f1e8a1o511" path="res://Scenes/player.tscn" id="2_gl6un"]
 [ext_resource type="PackedScene" uid="uid://cuk7mkt3nak18" path="res://Scenes/slimer.tscn" id="3_j5yw3"]
+[ext_resource type="PackedScene" uid="uid://bpl1wikccrnkv" path="res://Scenes/bullet.tscn" id="4_kldst"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_gl6un"]
 
@@ -20,6 +22,8 @@ distance = -238.131
 
 [node name="Node2D" type="Node2D"]
 y_sort_enabled = true
+script = ExtResource("1_b2bpf")
+slimer_scene = ExtResource("3_j5yw3")
 
 [node name="Background1" type="Sprite2D" parent="."]
 position = Vector2(-120, 0)
@@ -68,5 +72,10 @@ metadata/_edit_lock_ = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Boundaries/WallRight"]
 shape = SubResource("WorldBoundaryShape2D_b2bpf")
 
-[node name="Area2D" parent="." instance=ExtResource("3_j5yw3")]
-position = Vector2(215, 68)
+[node name="Area2D2" parent="." instance=ExtResource("4_kldst")]
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.0
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_spawn_slimer"]

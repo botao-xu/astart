@@ -1,5 +1,6 @@
-[gd_scene load_steps=21 format=3 uid="uid://d11f1e8a1o511"]
+[gd_scene load_steps=22 format=3 uid="uid://d11f1e8a1o511"]
 
+[ext_resource type="PackedScene" uid="uid://bpl1wikccrnkv" path="res://Scenes/bullet.tscn" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://qsq2hjda7p8l" path="res://AssetBundle/Sprites/Foxy.png" id="1_v0iea"]
 
 [sub_resource type="GDScript" id="GDScript_v0iea"]
@@ -8,6 +9,7 @@ script/source = "extends CharacterBody2D
 
 @export var move_speed : float = 50
 @export var animator : AnimatedSprite2D
+@export var bullet_scene : PackedScene
 var is_game_over : bool = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -26,6 +28,14 @@ func game_over():
 	animator.play(\"die\")
 	await get_tree().create_timer(3).timeout
 	get_tree().reload_current_scene()
+
+func _on_fire() -> void:
+	if velocity != Vector2.ZERO or is_game_over:
+		return
+	
+	var bullet_node = bullet_scene.instantiate()
+	bullet_node.position = position + Vector2(6, 6)
+	get_tree().current_scene.add_child(bullet_node)
 "
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gymyn"]
@@ -164,6 +174,7 @@ animations = [{
 script = SubResource("GDScript_v0iea")
 move_speed = 100.0
 animator = NodePath("AnimatedSprite2D")
+bullet_scene = ExtResource("1_cvnsp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_fkybt")
@@ -173,3 +184,9 @@ autoplay = "idle"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 5)
 shape = SubResource("CircleShape2D_v0iea")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_fire"]
