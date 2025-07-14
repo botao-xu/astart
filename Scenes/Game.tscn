@@ -1,7 +1,21 @@
-[gd_scene load_steps=3 format=3 uid="uid://iewu6lloy4v6"]
+[gd_scene load_steps=7 format=3 uid="uid://iewu6lloy4v6"]
 
 [ext_resource type="Texture2D" uid="uid://c00ft2gr8aq2c" path="res://AssetBundle/Sprites/ForestBackground.png" id="1_iukft"]
-[ext_resource type="PackedScene" uid="uid://drikoic70u781" path="res://Scenes/player.tscn" id="2_gl6un"]
+[ext_resource type="PackedScene" uid="uid://d11f1e8a1o511" path="res://Scenes/player.tscn" id="2_gl6un"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_gl6un"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_j5yw3"]
+normal = Vector2(0, 1)
+distance = 16.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_kldst"]
+normal = Vector2(0.999948, -0.0102036)
+distance = -101.76
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_b2bpf"]
+normal = Vector2(-0.999901, -0.0140831)
+distance = -238.131
 
 [node name="Node2D" type="Node2D"]
 
@@ -20,3 +34,33 @@ zoom = Vector2(2.4, 2.4)
 metadata/_edit_lock_ = true
 
 [node name="Player" parent="." instance=ExtResource("2_gl6un")]
+
+[node name="Boundaries" type="Node2D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="WallBottom" type="StaticBody2D" parent="Boundaries"]
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Boundaries/WallBottom"]
+position = Vector2(-2, 134)
+shape = SubResource("WorldBoundaryShape2D_gl6un")
+
+[node name="WallTop" type="StaticBody2D" parent="Boundaries"]
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Boundaries/WallTop"]
+position = Vector2(-1, -31)
+shape = SubResource("WorldBoundaryShape2D_j5yw3")
+
+[node name="WallLeft" type="StaticBody2D" parent="Boundaries"]
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Boundaries/WallLeft"]
+position = Vector2(-139, 43)
+shape = SubResource("WorldBoundaryShape2D_kldst")
+
+[node name="WallRight" type="StaticBody2D" parent="Boundaries"]
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Boundaries/WallRight"]
+shape = SubResource("WorldBoundaryShape2D_b2bpf")
