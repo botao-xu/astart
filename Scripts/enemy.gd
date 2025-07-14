@@ -21,6 +21,12 @@ func _on_area_entered(area: Area2D) -> void:
 	if area.is_in_group("bullet"):
 		is_dead = true
 		area.queue_free()
+		
+		# Increase score when slimer is killed by bullet
+		var game_manager = get_tree().current_scene
+		if game_manager.has_method("increase_score"):
+			game_manager.increase_score()
+		
 		$AnimatedSprite2D.play("death")
 		
 		await get_tree().create_timer(0.6).timeout

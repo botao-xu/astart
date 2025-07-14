@@ -8,10 +8,18 @@ var min_spawn_interval: float = 1.0      # Minimum spawn interval (frequency lim
 var spawn_acceleration: float = 0.2      # How much to decrease interval per second
 var last_spawn_time: float = 0.0         # Track when last spawn occurred
 
+# Score system
+var score: int = 0
+@export var score_label: Label
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# Initialize last spawn time
 	last_spawn_time = Time.get_time_dict_from_system()["second"]
+
+func increase_score() -> void:
+	score += 1
+	score_label.text = "Score: " + str(score)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
