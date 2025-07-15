@@ -124,7 +124,7 @@ animations = [{
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_t3fd4"]
 
-[node name="Area2D" type="Area2D"]
+[node name="Area2D" type="Area2D" groups=["enemy"]]
 script = ExtResource("1_4raqt")
 slimer_speed = -50.0
 

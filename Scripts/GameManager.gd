@@ -45,9 +45,30 @@ func show_congratulations() -> void:
 	game_ended = true
 	congratulations_label.visible = true
 	
+	# Freeze all game entities
+	freeze_all_entities()
+	
 	# Wait 3 seconds then restart the scene
 	await get_tree().create_timer(3).timeout
 	get_tree().reload_current_scene()
+
+func freeze_all_entities() -> void:
+	# Freeze the player
+	var player = get_node("Player")
+	if player and player.has_method("freeze_player"):
+		player.freeze_player()
+	
+	# Freeze all enemies (slimers)
+	var enemies = get_tree().get_nodes_in_group("enemy")
+	for enemy in enemies:
+		if enemy.has_method("freeze_enemy"):
+			enemy.freeze_enemy()
+	
+	# Freeze all bullets
+	var bullets = get_tree().get_nodes_in_group("bullet")
+	for bullet in bullets:
+		if bullet.has_method("freeze_bullet"):
+			bullet.freeze_bullet()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

@@ -2,9 +2,10 @@ extends Area2D
 
 @export var slimer_speed : float = -100
 var is_dead : bool = false
+var is_game_won : bool = false
 
 func _physics_process(delta: float) -> void:
-	if not is_dead:
+	if not is_dead and not is_game_won:
 		position += Vector2(slimer_speed, 0) * delta
 		
 		# Destroy slimer if it goes past the left edge of the screen
@@ -31,3 +32,8 @@ func _on_area_entered(area: Area2D) -> void:
 		
 		await get_tree().create_timer(0.6).timeout
 		queue_free()
+
+func freeze_enemy():
+	is_game_won = true
+	# Stop any current animation and play idle
+	$AnimatedSprite2D.play("idle")

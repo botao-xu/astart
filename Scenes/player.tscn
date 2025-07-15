@@ -11,12 +11,13 @@ script/source = "extends CharacterBody2D
 @export var animator : AnimatedSprite2D
 @export var bullet_scene : PackedScene
 var is_game_over : bool = false
+var is_game_won : bool = false
 var fire_cooldown : float = 0.0
 var fire_rate : float = 0.5  # Minimum time between shots
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
-	if not is_game_over:
+	if not is_game_over and not is_game_won:
 		velocity = Input.get_vector(\"left\", \"right\", \"up\", \"down\") * move_speed
 		if velocity == Vector2.ZERO:
 			animator.play(\"idle\")
@@ -30,7 +31,7 @@ func _physics_process(delta: float) -> void:
 		fire_cooldown -= delta
 	
 	# Check for fire input
-	if Input.is_action_just_pressed(\"fire\") and fire_cooldown <= 0:
+	if Input.is_action_just_pressed(\"fire\") and fire_cooldown <= 0 and not is_game_won:
 		fire_bullet()
 
 func game_over():
@@ -44,6 +45,11 @@ func game_over():
 	
 	await get_tree().create_timer(3).timeout
 	get_tree().reload_current_scene()
+
+func freeze_player():
+	is_game_won = true
+	# Stop any current animation and play idle
+	animator.play(\"idle\")
 
 func fire_bullet() -> void:
 	if velocity != Vector2.ZERO or is_game_over:
