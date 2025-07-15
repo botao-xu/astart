@@ -23,6 +23,9 @@ func _on_area_entered(area: Area2D) -> void:
 		is_dead = true
 		area.queue_free()
 		
+		# Play enemy death sound
+		$EnemyDeathAudio.play()
+		
 		# Increase score when slimer is killed by bullet
 		var game_manager = get_tree().current_scene
 		if game_manager.has_method("increase_score"):

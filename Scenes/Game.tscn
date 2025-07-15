@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://iewu6lloy4v6"]
+[gd_scene load_steps=11 format=3 uid="uid://iewu6lloy4v6"]
 
 [ext_resource type="Script" uid="uid://e60pb6koi8f0" path="res://Scripts/GameManager.gd" id="1_b2bpf"]
 [ext_resource type="Texture2D" uid="uid://c00ft2gr8aq2c" path="res://AssetBundle/Sprites/ForestBackground.png" id="1_iukft"]
 [ext_resource type="PackedScene" uid="uid://d11f1e8a1o511" path="res://Scenes/player.tscn" id="2_gl6un"]
 [ext_resource type="PackedScene" uid="uid://cuk7mkt3nak18" path="res://Scenes/slimer.tscn" id="3_j5yw3"]
 [ext_resource type="FontFile" uid="uid://7r84ij5fhfyl" path="res://AssetBundle/Uranus_Pixel_11Px.ttf" id="5_b2bpf"]
+[ext_resource type="AudioStream" uid="uid://bvoai2cl7m52o" path="res://AssetBundle/Audio/BGM.ogg" id="6_bgm"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_gl6un"]
 
@@ -146,5 +147,10 @@ SPACE: Shoot"
 [node name="Timer" type="Timer" parent="."]
 wait_time = 3.0
 autostart = true
+
+[node name="BGMPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_bgm")
+volume_db = -10.0
+autoplay = true
 
 [connection signal="timeout" from="Timer" to="." method="_spawn_slimer"]

@@ -1,7 +1,10 @@
-[gd_scene load_steps=22 format=3 uid="uid://d11f1e8a1o511"]
+[gd_scene load_steps=25 format=3 uid="uid://d11f1e8a1o511"]
 
 [ext_resource type="PackedScene" uid="uid://bpl1wikccrnkv" path="res://Scenes/bullet.tscn" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://qsq2hjda7p8l" path="res://AssetBundle/Sprites/Foxy.png" id="1_v0iea"]
+[ext_resource type="AudioStream" uid="uid://uha3fbas2skx" path="res://AssetBundle/Audio/Gun.mp3" id="2_gun"]
+[ext_resource type="AudioStream" uid="uid://dqbvi8gls7skj" path="res://AssetBundle/Audio/Running.mp3" id="3_running"]
+[ext_resource type="AudioStream" uid="uid://de3rklyv20m31" path="res://AssetBundle/Audio/GameOver.mp3" id="4_gameover"]
 
 [sub_resource type="GDScript" id="GDScript_v0iea"]
 script/source = "extends CharacterBody2D
@@ -14,11 +17,24 @@ var is_game_over : bool = false
 var is_game_won : bool = false
 var fire_cooldown : float = 0.0
 var fire_rate : float = 0.5  # Minimum time between shots
+var was_moving : bool = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
 	if not is_game_over and not is_game_won:
 		velocity = Input.get_vector(\"left\", \"right\", \"up\", \"down\") * move_speed
+		
+		# Handle movement audio
+		var is_moving = velocity != Vector2.ZERO
+		if is_moving and not was_moving:
+			# Started moving - play running sound
+			$RunningAudio.play()
+		elif not is_moving and was_moving:
+			# Stopped moving - stop running sound
+			$RunningAudio.stop()
+		was_moving = is_moving
+		
+		# Handle animation
 		if velocity == Vector2.ZERO:
 			animator.play(\"idle\")
 		else:
@@ -38,6 +54,12 @@ func game_over():
 	is_game_over = true
 	animator.play(\"die\")
 	
+	# Stop running sound if playing
+	$RunningAudio.stop()
+	
+	# Play game over sound
+	$GameOverAudio.play()
+	
 	# Show game over UI
 	var game_manager = get_tree().current_scene
 	if game_manager.has_method(\"show_game_over\"):
@@ -48,12 +70,17 @@ func game_over():
 
 func freeze_player():
 	is_game_won = true
+	# Stop running sound if playing
+	$RunningAudio.stop()
 	# Stop any current animation and play idle
 	animator.play(\"idle\")
 
 func fire_bullet() -> void:
 	if velocity != Vector2.ZERO or is_game_over:
 		return
+	
+	# Play gun sound
+	$GunAudio.play()
 	
 	var bullet_node = bullet_scene.instantiate()
 	bullet_node.position = position + Vector2(6, 6)
@@ -211,3 +238,15 @@ shape = SubResource("CircleShape2D_v0iea")
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.5
 autostart = true
+
+[node name="GunAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_gun")
+volume_db = -5.0
+
+[node name="RunningAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_running")
+volume_db = -8.0
+
+[node name="GameOverAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_gameover")
+volume_db = -3.0
